@@ -7,14 +7,30 @@ function App() {
     name: "",
     email: "",
     message: "",
-    // profile_pic: "",
+    profile_pic: null,
   });
 
-  function handleStateChange(e) {
+  const handleStateChange = (e) => {
     setMailerState((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setMailerState((prevState) => ({
+        ...prevState,
+        profile_pic: reader.result,
+      }));
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   }
 
   const submitEmail = async (e) => {
@@ -42,17 +58,10 @@ function App() {
           email: "",
           name: "",
           message: "",
-          // profile_pic: "",
+          profile_pic: null,
         });
       });
   };
-  // const handleFileChange = (event) => {
-  //   setMailerState({
-  //     ...mailerState,
-  //     profile_pic: event.target.files[0],
-  //   });
-  //   console.log(mailerState);
-  // };
 
   return (
     <div className="App">
@@ -84,7 +93,7 @@ function App() {
             name="message"
             value={mailerState.message}
           />
-          {/* <input type="file" className="form-control" id="profile_pic" name="profile_pic" onChange={handleFileChange} /> */}
+          <input type="file" className="form-control" id="profile_pic" name="profile_pic" onChange={handleFileChange} />
           <button className='send-message'>Send Message</button>
         </div>
       </form>
